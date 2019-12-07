@@ -9,7 +9,8 @@
 
 import Todos from '@/js/components/Todos';
 import AddTodo from "@/js/components/AddTodo"
-import axios from 'axios'
+import axios from 'axios';
+import { compileFunction } from 'vm';
 
 export default {
   name: 'Home',
@@ -24,24 +25,23 @@ export default {
   },
   methods: {
       deleteTodo(id) {
-        axios.delete(`https://jsonplaceholder.typicode.com/todos/${id}`)
-        .then(this.todos = this.todos.filter(todo => todo.id !== id))
+        this.todos = this.todos.filter(todo => todo.id !== id)
       },
       addTodo(newTodo) {
-          const { title, completed } = newTodo;
+          const { text, finished } = newTodo;
+          this.todos = [...this.todos, newTodo]     
+      },
+      getTodos() {
+        const t = this;
 
-          axios.post("https://jsonplaceholder.typicode.com/todos", {
-              title,
-              completed
-          })
-          .then(res => this.todos = [...this.todos, res.data])
-          
+        axios.get('/todos')
+            .then(({data}) => {
+                t.todos = data;
+            });
       }
   },
   created() {
-    axios.get("https://jsonplaceholder.typicode.com/todos?_limit=5")
-    .then(res => this.todos = res.data)
-    
+    this.getTodos();
   }
 }
 </script>

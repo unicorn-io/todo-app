@@ -37,7 +37,7 @@ class TodoController extends Controller
     {
         $data = $request->validate([
             'text' => 'required',
-            'finished' => 'required|boolean',
+            'completed' => 'required|boolean',
         ]);
         $todo = Todo::create($data);
         return response($todo, 201);
@@ -76,7 +76,7 @@ class TodoController extends Controller
     {
         $data = $request->validate([
             'text' => 'required',
-            'finished' => 'required|boolean',
+            'completed' => 'required|boolean',
         ]);
         $todo->update($data);
         return response($todo, 200);

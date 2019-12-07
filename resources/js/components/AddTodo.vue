@@ -1,30 +1,32 @@
 <template>
     <div>
         <form @submit='addTodo'>
-            <input type="text" v-model="title" name="title" placeholder="AddTodo...">
+            <input type="text" v-model="text" name="text" placeholder="AddTodo...">
             <input type="submit" value="submit" class="btn">
         </form>
     </div>
 </template>
 
 <script>
+import uuid from 'uuid';
 export default {
     name: "AddTodo",
     data() {
         return {
-            title: ""
+            text: ""
         }
     },
     methods: {
         addTodo(e) {
             e.preventDefault();
-            const newTodo = {
-                title: this.title,
-                completed: false
-            }
+            const t = this;
+                axios.post('/todos', {text: text, finished: false})
+                    .then(({data}) => {
+                        t.todos.unshift(data);
+                    });
 
             this.$emit('add-todo', newTodo);
-            this.title= "";
+            this.text= "";
         }
     }
 }
